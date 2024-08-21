@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "107700309928",
+    "project_id": "dropill-a786e",
+    "storage_bucket": "dropill-a786e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107700309928:android:b02bc68db6a00575d2579d",
+        "android_client_info": {
+          "package_name": "com.dropill_project.dropill_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBeQoAVVWtVAbjAlUTQpO3GkaaYnZ6cBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
