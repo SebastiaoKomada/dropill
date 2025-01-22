@@ -3,8 +3,12 @@ import 'package:dropill_project/features/config/config_page.dart';
 import 'package:dropill_project/features/home/home_page.dart';
 import 'package:dropill_project/features/home/home_page_view.dart';
 import 'package:dropill_project/features/medication/medication_page.dart';
+import 'package:dropill_project/features/medication/medication_page_view.dart';
 import 'package:dropill_project/features/monitoring/monitoring_page.dart';
+import 'package:dropill_project/features/monitoring/monitoring_page_view.dart';
 import 'package:dropill_project/features/profile/profile_page.dart';
+import 'package:dropill_project/features/profile/profile_page_add.dart';
+import 'package:dropill_project/features/profile/profile_page_edit.dart';
 import 'package:dropill_project/features/sign_in/sign_in_page.dart';
 import 'package:dropill_project/features/sign_up/sign_up_page.dart';
 import 'package:dropill_project/features/splash/splash_page.dart';
@@ -32,6 +36,10 @@ class App extends StatelessWidget {
         NamedRoute.monitoring: (context) => const MonitoringPage(),
         NamedRoute.createMedication: (context) => const MedicationPage(),
         NamedRoute.confirmation: (context) => const ConfirmationPage(),
+        NamedRoute.medicationView: (context) => const MedicationPageView(),
+        NamedRoute.profileAdd: (context) => const ProfilePageAdd(),
+        NamedRoute.monitoringAdd: (context) => const MonitoringPageView(),
+        NamedRoute.profileEdit: (context) => const ProfilePageEdit(),
       },
     );
   }

@@ -10,6 +10,7 @@ class MedicationModel {
   final DateTime? dataFinal;
   final int? perId;
   final bool? estado;
+  final List<String>? horario;
 
   MedicationModel({
     this.id,
@@ -21,6 +22,7 @@ class MedicationModel {
     this.dataFinal,
     this.perId,
     this.estado,
+    this.horario,
   });
 
   MedicationModel copyWith({
@@ -33,6 +35,7 @@ class MedicationModel {
     DateTime? dataFinal,
     int? perId,
     bool? estado,
+    List<String>? horario,
   }) {
     return MedicationModel(
       id: id ?? this.id,
@@ -44,6 +47,7 @@ class MedicationModel {
       dataFinal: dataFinal ?? this.dataFinal,
       perId: perId ?? this.perId,
       estado: estado ?? this.estado,
+      horario: horario ?? this.horario,
     );
   }
 
@@ -54,10 +58,11 @@ class MedicationModel {
       'med_descricao': descricao,
       'med_tipo': tipo,
       'med_quantidade': quantidade,
-      'med_dataAtual': dataAtual?.toIso8601String(),
+      'med_dataInicio': dataAtual?.toIso8601String(),
       'med_dataFinal': dataFinal?.toIso8601String(),
       'med_perId': perId,
       'med_estado': estado,
+      'hor_horario': horario,
     };
   }
 
@@ -68,10 +73,17 @@ class MedicationModel {
       descricao: map['med_descricao'] as String?,
       tipo: map['med_tipo'] as String?,
       quantidade: map['med_quantidade'] as int?,
-      dataAtual: map['med_dataAtual'] != null ? DateTime.parse(map['med_dataAtual'] as String) : null,
-      dataFinal: map['med_dataFinal'] != null ? DateTime.parse(map['med_dataFinal'] as String) : null,
+      dataAtual: map['med_dataInicio'] != null
+          ? DateTime.parse(map['med_dataInicio'] as String)
+          : null,
+      dataFinal: map['med_dataFinal'] != null
+          ? DateTime.parse(map['med_dataFinal'] as String)
+          : null,
       perId: map['med_perId'] as int?,
       estado: map['med_estado'] as bool?,
+      horario: map['hor_horario'] != null
+          ? List<String>.from(map['hor_horario'])
+          : null, // Convertendo a lista de horários
     );
   }
 

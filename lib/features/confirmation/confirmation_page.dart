@@ -15,7 +15,7 @@ class ConfirmationPage extends StatefulWidget {
 
 class _ConfirmationPageState extends State<ConfirmationPage> {
   final ConfirmationController _confirmationController =
-      locator<ConfirmationController>();
+  locator<ConfirmationController>();
 
   Map<String, dynamic>? data;
   bool _isLoading = false;
@@ -42,7 +42,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         Navigator.pushNamedAndRemoveUntil(
           context,
           NamedRoute.homeView,
-          (route) => false,
+              (route) => false,
         );
       } finally {
         setState(() {
@@ -57,38 +57,61 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Confirme',
-          style: AppTextStyles.mediumText30.copyWith(color: AppColors.black),
+          'Confirme Agora',
+          style: AppTextStyles.mediumText24
+              .copyWith(color: AppColors.standartBlue),
         ),
       ),
-      body: Center(
-        child: _isLoading
-            ? CircularProgressIndicator()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Nome: ${data?['med_nome'] ?? 'Unknown'}',
-                    style: AppTextStyles.mediumText24
-                        .copyWith(color: AppColors.standartBlue),
-                  ),
-                  Text(
-                    'Horario: ${data?['horario'] ?? 'Unknown'}',
-                    style: AppTextStyles.mediumText24
-                        .copyWith(color: AppColors.standartBlue),
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: PrimaryButton(
-                      text: 'Confirmar',
-                      onPressed: () async {
-                        await confirm();
-                      },
-                    ),
-                  ),
-                ],
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: _isLoading
+              ? const CircularProgressIndicator()
+              : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: AppColors.standartBlue,
+                size: 80,
               ),
+              const SizedBox(height: 20),
+              Text(
+                'Você está quase lá!',
+                style: AppTextStyles.mediumText24.copyWith(
+                  color: AppColors.standartBlue,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Confirme a medicação abaixo para completar o processo.',
+                style: AppTextStyles.mediumText18.copyWith(
+                  color: AppColors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              Text(
+                'Nome: ${data?['med_nome'] ?? 'Desconhecido'}',
+                style: AppTextStyles.mediumText24.copyWith(color: AppColors.grey),
+              ),
+              Text(
+                'Horário: ${data?['horario'] ?? 'Desconhecido'}',
+                style: AppTextStyles.mediumText24.copyWith(color: AppColors.grey),
+              ),
+              const SizedBox(height: 20),
+              PrimaryButton(
+                text: 'Confirmar',
+                onPressed: () async {
+                  await confirm();
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:dropill_project/services/secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ConfirmationService {
-  final String apiUrl = 'http://10.0.2.2:8000';
+  final String apiUrl = 'https://dropill-api.onrender.com';
   final SecureStorage _secureStorage;
 
   ConfirmationService(this._secureStorage);

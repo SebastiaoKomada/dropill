@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class MedicationService {
-  final String apiUrl = 'http://10.0.2.2:8000';
+  final String apiUrl = 'https://dropill-api.onrender.com';
   final SecureStorage _secureStorage;
 
   MedicationService(this._secureStorage);
@@ -63,6 +63,43 @@ class MedicationService {
     } catch (e) {
       log('Erro ao obter medicamentos: $e');
       throw Exception('Erro ao obter medicamentos: $e');
+    }
+  }
+
+  Future<List<MedicationModel>> getMedicationsById(int medId) async {
+    final medID = await _secureStorage.readOne(key: "MEDICATION_ID");
+    if (medID != null) {
+      final result = jsonDecode(medID);
+
+      final String url = '$apiUrl/medication/$result';
+      //print('Request URL: $url');
+
+      try {
+        final http.Response response = await http.get(Uri.parse(url));
+
+        print('Response Body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          final dynamic responseData = jsonDecode(response.body);
+
+          if (responseData is Map<String, dynamic>) {
+            return [MedicationModel.fromMap(responseData)];
+          } else {
+            throw Exception('Formato de resposta inesperado');
+          }
+        } else if (response.statusCode == 404) {
+          print('No medications found (404)');
+          return [];
+        } else {
+          throw Exception(
+              'Falha ao obter medicamentos. Código de status: ${response.statusCode}');
+        }
+      } catch (e) {
+        log('Erro ao obter medicamentos: $e');
+        throw Exception('Erro ao obter medicamentos: $e');
+      }
+    } else {
+      throw Exception('User data not found');
     }
   }
 
@@ -154,6 +191,29 @@ class MedicationService {
       }
     } catch (e) {
       throw Exception('Erro ao criar horários: $e');
+    }
+  }
+
+  Future<void> deleteMedication(int medId) async {
+    final String url = '$apiUrl/medication/$medId';
+
+    try {
+      final http.Response response = await http.delete(
+        Uri.parse(url),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        log('Medicação deletada com sucesso.');
+      } else if (response.statusCode == 404) {
+        throw Exception('Medicação não encontrada.');
+      } else {
+        throw Exception(
+            'Erro ao deletar a medicação. Código de status: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Erro ao deletar medicação: $e');
+      throw Exception('Erro ao deletar medicação: $e');
     }
   }
 }

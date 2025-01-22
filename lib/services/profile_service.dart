@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dropill_project/common/models/profile_model.dart';
 import 'package:dropill_project/services/secure_storage.dart';
@@ -9,7 +10,11 @@ class ProfileService {
 
   ProfileService(this._secureStorage);
 
-  final String apiUrl = 'http://10.0.2.2:8000';
+  final String apiUrl = 'https://dropill-api.onrender.com';
+
+  static const Map<String, String> headers = {
+    'Content-Type': 'application/json',
+  };
 
   Future<List<ProfileModel>> listProfiles() async {
     final result = await _secureStorage.readOne(key: "CURRENT_USER");
@@ -47,16 +52,109 @@ class ProfileService {
     }
   }
 
-  Future<void> saveProfileId(ProfileModel profile) async {
-    try {
-      final setProfile = {
-        'id': profile.id,
-        'name': profile.name,
-      };
-      final jsonProfile = jsonEncode(setProfile);
-      await _secureStorage.write(key: 'SELECTED_PROFILE', value: jsonProfile);
-    } catch (e) {
-      print('Erro ao salvar ID do perfil no Secure Storage: $e');
+  Future<ProfileModel> createProfile({
+    required String name,
+  }) async {
+    final userString = await _secureStorage.readOne(key: "CURRENT_USER");
+
+    if (userString != null) {
+      final jsonUser = jsonDecode(userString);
+      final userID = jsonUser['id'];
+
+      final createProfileUrl = '$apiUrl/profile/$userID';
+
+      try {
+        final createResponse = await http.post(
+          Uri.parse(createProfileUrl),
+          headers: headers,
+          body: jsonEncode({
+            'per_nome': name,
+          }),
+        );
+
+        print('Response body: ${createResponse.body}');
+        if (createResponse.statusCode == 200) {
+          final profileJson = jsonDecode(createResponse.body);
+          return ProfileModel.fromJson(createResponse.body);
+        } else if (createResponse.statusCode == 401) {
+          throw Exception('Credenciais inválidas');
+        } else {
+          throw Exception(
+              'Não foi possível criar o perfil. Código de status: ${createResponse.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Erro ao criar o perfil: $e');
+      }
+    } else {
+      throw Exception('Usuário não encontrado');
+    }
+  }
+
+  Future<ProfileModel> editProfile({
+    required String name,
+  }) async {
+    final profileString = await _secureStorage.readOne(key: "SELECTED_PROFILE");
+
+    if (profileString != null) {
+      final jsonUser = jsonDecode(profileString);
+      final profileID = jsonUser['id'];
+
+      final editProfileUrl = '$apiUrl/profile/alterName/$profileID';
+
+      try {
+        final createResponse = await http.patch(
+          Uri.parse(editProfileUrl),
+          headers: headers,
+          body: jsonEncode({
+            'per_nome': name,
+          }),
+        );
+
+        print('Response body: ${createResponse.body}');
+        if (createResponse.statusCode == 200) {
+          final profileJson = jsonDecode(createResponse.body);
+          return ProfileModel.fromJson(createResponse.body);
+        } else if (createResponse.statusCode == 401) {
+          throw Exception('Credenciais inválidas');
+        } else {
+          throw Exception(
+              'Não foi possível editar o perfil. Código de status: ${createResponse.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Erro ao editar o perfil: $e');
+      }
+    } else {
+      throw Exception('Perfil não encontrado');
+    }
+  }
+
+  Future<void> deleteProfile() async {
+    final profileString = await _secureStorage.readOne(key: "SELECTED_PROFILE");
+    if (profileString != null) {
+      final jsonUser = jsonDecode(profileString);
+      final profileID = jsonUser['id'];
+
+      final deleteProfileUrl = '$apiUrl/profile/$profileID';
+
+      try {
+        final http.Response response = await http.delete(
+          Uri.parse(deleteProfileUrl),
+          headers: headers,
+        );
+
+        if (response.statusCode == 200) {
+          log('Perfil deletado com sucesso.');
+        } else if (response.statusCode == 404) {
+          throw Exception('Perfil não encontrada.');
+        } else {
+          throw Exception(
+              'Erro ao deletar o perfil. Código de status: ${response
+                  .statusCode}');
+        }
+      } catch (e) {
+        log('Erro ao deletar perfil: $e');
+        throw Exception('Erro ao deletar perfil: $e');
+      }
     }
   }
 }

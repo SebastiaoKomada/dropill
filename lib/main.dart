@@ -16,6 +16,7 @@ Future<void> main() async {
 
   final secureStorage = SecureStorage();
 
+
   await Firebase.initializeApp();
 
   final firebaseMessagingService = FirebaseMessagingService(secureStorage);

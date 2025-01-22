@@ -4,6 +4,7 @@ import 'package:dropill_project/common/widgets/custom_medication_list.dart';
 import 'package:dropill_project/features/home/home_controller.dart';
 import 'package:dropill_project/features/home/home_state.dart';
 import 'package:dropill_project/locator.dart';
+import 'package:dropill_project/services/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomeController _homeController;
+  final SecureStorage _secureStorage = SecureStorage();
 
   @override
   void initState() {
@@ -60,8 +62,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 _homeController.medicationsList.isNotEmpty
                     ? CustomMedicationList(
-                        medications: _homeController.medicationsList)
-                    : const SizedBox.shrink(),
+                        secureStorage: _secureStorage,
+                        medications: _homeController.medicationsList,
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        height: 120,
+                        child: Text(
+                          'Nenhum medicamento disponível',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.mediumText16w500
+                              .copyWith(color: AppColors.grey),
+                        ),
+                      ),
               ],
             ),
           );

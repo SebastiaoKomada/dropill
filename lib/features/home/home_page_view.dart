@@ -24,7 +24,12 @@ class _HomePageViewState extends State<HomePageView> {
     super.initState();
     _pageController = PageController();
     _pageController.addListener(() {
-      log(_pageController.page.toString());
+      if (_pageController.page != null && _selectedIndex != _pageController.page!.round()) {
+        setState(() {
+          _selectedIndex = _pageController.page!.round();
+        });
+        print('Página alterada para: $_selectedIndex');
+      }
     });
   }
 
@@ -53,7 +58,8 @@ class _HomePageViewState extends State<HomePageView> {
           ConfigPage(),
         ],
       ),
-      floatingActionButton: Material(
+      floatingActionButton: (_selectedIndex == 0 || _selectedIndex == 1) // Verifica se o botão deve ser exibido
+          ? Material(
         color: Colors.transparent,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(32.0),
@@ -61,15 +67,19 @@ class _HomePageViewState extends State<HomePageView> {
             backgroundColor: AppColors.standartBlue,
             foregroundColor: AppColors.white,
             onPressed: () async {
-              final result = await Navigator.pushNamed(context, NamedRoute.createMedication);
-              if (result != null) {
-                // Lógica para atualizar dados se necessário
+              if (_selectedIndex == 0) {
+                final result = await Navigator.pushNamed(
+                    context, NamedRoute.createMedication);
+              } else if (_selectedIndex == 1) {
+                final result = await Navigator.pushNamed(
+                    context, NamedRoute.monitoringAdd);
               }
             },
             child: const Icon(Icons.add),
           ),
         ),
-      ),
+      )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: CustomBottomAppBar(
         controller: _pageController,

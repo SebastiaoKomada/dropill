@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTextStyles {
   AppTextStyles._();
 
-static const TextStyle bigText50 = TextStyle(
+  static const TextStyle bigText50 = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 50.0,
     fontWeight: FontWeight.w700,
@@ -33,6 +33,11 @@ static const TextStyle bigText50 = TextStyle(
     fontWeight: FontWeight.w600,
   );
 
+  static const TextStyle mediumText14 = TextStyle(
+    fontFamily: 'Poppins',
+    fontSize: 14.0,
+  );
+
   static const TextStyle mediumText18 = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 18.0,
@@ -45,7 +50,13 @@ static const TextStyle bigText50 = TextStyle(
     fontWeight: FontWeight.w600,
   );
 
-    static const TextStyle mediumText24 = TextStyle(
+  static const TextStyle mediumText22 = TextStyle(
+    fontFamily: 'Poppins',
+    fontSize: 22.0,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const TextStyle mediumText24 = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 24.0,
     fontWeight: FontWeight.w600,

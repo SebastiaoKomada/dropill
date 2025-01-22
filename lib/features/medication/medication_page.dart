@@ -43,7 +43,7 @@ class MedicationPage extends StatelessWidget {
         title: Text(
           'Cadastro do Medicamento',
           textAlign: TextAlign.center,
-          style: AppTextStyles.mediumText24
+          style: AppTextStyles.mediumText20
               .copyWith(color: AppColors.standartBlue),
         ),
       ),
@@ -313,7 +313,7 @@ class _Step1State extends State<Step1> {
                     CustomTextFormField(
                       controller: widget.quantityController,
                       focusNode: _quantityFocusNode,
-                      labelText: 'Quantidade',
+                      labelText: 'Dose',
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.done,
                       onEditingComplete: () {

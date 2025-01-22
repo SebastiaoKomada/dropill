@@ -29,9 +29,9 @@ class HomeController extends ChangeNotifier {
   void existsIdProfile() async {
     try {
       final jsonString = await _service.readOne(key: "SELECTED_PROFILE");
-      //log(jsonString.toString());
       if (jsonString != null) {
         final jsonProfile = jsonDecode(jsonString);
+        //print(jsonProfile);
         userName = jsonProfile['name'];
         _changeState(HomeStateSuccess());
       } else {
@@ -46,13 +46,13 @@ class HomeController extends ChangeNotifier {
     _changeState(HomeStateLoading());
     try {
       final profile = await _service.readOne(key: "SELECTED_PROFILE");
-      
+
       if (profile != null) {
         final profileData = jsonDecode(profile);
-        //log(profileData.toString());
         final int perId = profileData['id'];
         log(perId.toString());
-        medicationsList = await _medicationService.getMedicationsByProfile(perId);
+        medicationsList =
+            await _medicationService.getMedicationsByProfile(perId);
         if (medicationsList.isEmpty) {
           log('Nenhum medicamento encontrado para este perfil.');
         }
